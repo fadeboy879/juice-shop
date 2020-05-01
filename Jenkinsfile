@@ -1,7 +1,7 @@
 pipeline {
 	environment {
 		project = "https://github.com/pannoi/juice-shop.git"
-		containerName = "magazinSokov"
+		containerName = "magazin-sokov"
 	}
 	agent any
 	options {
@@ -27,12 +27,12 @@ pipeline {
 			parallel {
 				stage ('run unit') {
 					steps {
-						echo 'units'
+						echo 'npm run test'
 					}
 				}
 				stage ('run lint') {
 					steps {
-						echo 'lints'
+						echo 'npm lint'
 					}
 				}
 			}
