@@ -1,6 +1,7 @@
 pipeline {
 	environment {
-		helloWorld = "Hi!"
+		project = "https://github.com/pannoi/juice-shop.git"
+		containerName = "magazinSokov"
 	}
 	agent any
 	options {
@@ -12,9 +13,35 @@ pipeline {
 				deleteDir()
 			}
 		}
-		stage ('helloWorld') {
+		stage ('get src') {
 			steps {
-				echo "${helloWorld}"
+				git url: "${project}"
+			}
+		}
+		stage ('get dependency') {
+			steps {
+				echo 'npm install'
+			}
+		}
+		stage ('run tests') {
+			parallel {
+				stage ('run unit') {
+					steps {
+						echo 'units'
+					}
+				}
+				stage ('run lint') {
+					steps {
+						echo 'lints'
+					}
+				}
+			}
+		}
+		stage ('build') {
+			steps {
+				script {
+					dockerImage = docker.build("${containerName}", ".")
+				}
 			}
 		}
 	}
